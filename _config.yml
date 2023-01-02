@@ -1,7 +1,7 @@
 # Site settings
 title: Ge's Blog
 SEOTitle: 葛的博客 | Ge Blog
-header-img: img/home-bg.jpg
+#header-img: img/home-bg.jpg
 email: gebaocai@gmail.com
 description: "关于IT、黑客 | gebaocai，Software Engineer | 这里是 @gebaocai 的个人博客，与你一起发现更大的世界。"
 keyword: "葛, gebaocai, Hack, erlang, Ge Blog, 博客, 个人网站, 互联网, Web, JavaScript, 前端, 设计"
