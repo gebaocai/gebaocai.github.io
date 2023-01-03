@@ -63,7 +63,9 @@ console.log(signature)
 ```
 输出为:
 
-```_02B4Z6wo00f01UrgjaQAAIDDbDSpRwpvTlVK1IEAADEPqWrhO7vbr4hW27Nfzj0iZoast1HB7ltGjCjYAnpAtndxL7rX4eenX4b7cgudFN8uJv4yHImO2UFfNmP9QTG008DuIyLhQgqw1AGs4f```
+```
+_02B4Z6wo00f01UrgjaQAAIDDbDSpRwpvTlVK1IEAADEPqWrhO7vbr4hW27Nfzj0iZoast1HB7ltGjCjYAnpAtndxL7rX4eenX4b7cgudFN8uJv4yHImO2UFfNmP9QTG008DuIyLhQgqw1AGs4f
+```
 
 我们拼接为url试一下
 ```
