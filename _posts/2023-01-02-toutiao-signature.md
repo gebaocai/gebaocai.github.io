@@ -31,7 +31,7 @@ https://www.toutiao.com/api/pc/list/user/feed
 
 ![](/img/in-post/toutiao-signature/feed3.png)
 
-2. _signature
+2. signature
 
 上面两次请求_signature不一样，在Network里也没有发现_signature生成的信息，那么应该是JS生成的了。
 
@@ -78,7 +78,7 @@ https://www.toutiao.com/api/pc/list/user/feed?category=pc_profile_ugc&token=MS4w
 数据返回正常，说明signature是正确的.
 
 那么如何通过程序调用生成signature呢？
-破解`acrawler.js`里的算法吗？也是个办法吧，但里面涉及到动态加载的东西，难度有点大。 这里我们是通过`nodejs`实现的， 我们在本地跑一个测试一下
+破解`acrawler.js`里的算法吗？也是个办法吧，但里面涉及到动态加载的东西，难度有点大。 这里我们是通过`nodejs`实现的， 我们在本地测试一下
 ![](/img/in-post/toutiao-signature/python1.png)
 
 YES！ 数据也是正常返回的。
