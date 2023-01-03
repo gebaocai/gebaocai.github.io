@@ -1,7 +1,7 @@
 {
-  "name": "Hux Blog",
-  "short_name": "Hux Blog",
-  "description": "About an engineer & designer who loves web.",
+  "name": "Ge's Blog",
+  "short_name": "Ge's Blog",
+  "description": "关于IT、黑客 | gebaocai，Software Engineer | 这里是 @gebaocai 的个人博客，与你一起发现更大的世界。",
   "icons": [{
     "src": "icons/128.png",
     "sizes": "128x128",
