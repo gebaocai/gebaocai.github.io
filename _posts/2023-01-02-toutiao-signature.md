@@ -84,7 +84,7 @@ YES！ 数据也是正常返回的。
 ------
 我们把上面用到生成signature部署到了服务器, 地址为：
 
-`http://kr.baocai.cf/sign?url=[url]`
+`http://kr.baocai.cf:3000/sign?url=[url]`
 
 url需要做`urlencode`才行, 实例：
 ```
