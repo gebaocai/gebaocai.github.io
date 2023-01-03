@@ -25,13 +25,13 @@ https://www.toutiao.com/api/pc/list/user/feed
 ![](/img/in-post/toutiao-signature/feed2.png)
 
 可以看到两者变化的只有两个参数:
-1. max_behot_time
+* max_behot_time
 
 通过分析得出 `max_behot_time` 是通过上次请求 `/api/pc/list/user/feed` 返回来的
 
 ![](/img/in-post/toutiao-signature/feed3.png)
 
-2. signature
+* _signature
 
 上面两次请求_signature不一样，在Network里也没有发现_signature生成的信息，那么应该是JS生成的了。
 
