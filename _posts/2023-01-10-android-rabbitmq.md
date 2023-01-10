@@ -15,6 +15,7 @@ tags: [android, rabbitmq, 聊天室]
 采用RabbitMQ， 用Docker安装RabbitMQ
 
 1. docker-compose 配置 RabbitMQ
+
 ```
 version: '3.3'
 services:
@@ -33,7 +34,9 @@ networks:
     external: true
 
 ```
+
 1. ./conf/rabbitmq/rabbitmq-isolated.conf
+
 ```
 [
  {rabbit,
@@ -54,6 +57,7 @@ networks:
 ```
 
 1. 启动RabbitMQ
+
 ```
 docker-compose up -d rabbitmq
 ```
