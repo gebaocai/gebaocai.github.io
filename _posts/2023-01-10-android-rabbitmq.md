@@ -10,11 +10,11 @@ tags: [android, rabbitmq, 聊天室]
 ------
 ![](/img/in-post/2023/android-rabbitmq/sample.gif)
 
-1. 后端服务
+一. 后端服务
 ------
 采用RabbitMQ， 用Docker安装RabbitMQ
 
-1.1. docker-compose 配置 RabbitMQ
+1. docker-compose 配置 RabbitMQ
 ```
 version: '3.3'
 services:
@@ -33,7 +33,7 @@ networks:
     external: true
 
 ```
-1.2. ./conf/rabbitmq/rabbitmq-isolated.conf
+1. ./conf/rabbitmq/rabbitmq-isolated.conf
 ```
 [
  {rabbit,
@@ -53,12 +53,12 @@ networks:
 ].
 ```
 
-1.3. 启动RabbitMQ
+1. 启动RabbitMQ
 ```
 docker-compose up -d rabbitmq
 ```
 
-2. Android使用技术点
+二. Android使用技术点
 ------
 Room+Livedata+ViewModel+RecycleView
 详情请参照代码
