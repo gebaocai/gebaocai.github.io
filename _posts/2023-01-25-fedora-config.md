@@ -4,7 +4,7 @@ title: fedora安装之后的配置
 author: "gebaocai"
 header-style: text
 lang: zh
-tags: [PyTorch, CUDA, AI]
+tags: [Fedora]
 ---
 
 保持系统更新
@@ -121,8 +121,7 @@ sudo dnf install xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
 
 桌面外观Gnome Tweak Tool
 ------
-一款对gnome界面調整的软件，可以修改主题、字体、gnome扩展、窗口、开机自启动等:
-------
+一款对gnome界面調整的软件，可以修改主题、字体、gnome扩展、窗口、开机自启动等
 ```
 sudo dnf install gnome-tweak-tool
 # 安装浏览器gnome扩展组件
