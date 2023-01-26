@@ -7,7 +7,7 @@ lang: zh
 tags: [Fedora, clash for windows, v2ray]
 ---
 
-之前一直在windows上用clash_for_windows, 最近切回来Fedora平台, 发现clash_for_windows也有Linux平的版本, 今天适用了一下，效果还不错， 这里记录下安装过程.
+之前一直在windows上用clash_for_windows, 最近切回来Fedora平台, 发现clash_for_windows也有Linux平的版本, 今天试用了一下，效果还不错， 这里记录下安装过程.
 
 
 
