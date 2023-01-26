@@ -7,63 +7,144 @@ lang: zh
 tags: [PyTorch, CUDA, AI]
 ---
 
-[main]
-; 是否开启gpg校验
-gpgcheck=1
-; 允许保留多少旧内核包
-installonly_limit=3
-; 删除软件同时删除依赖包
-clean_requirements_on_remove=True
-; 查找最快镜像
-fastestmirror=true
-; 下载增量包
-deltarpm=true
-; 最大并发下载数量
-max_parallel_downloads=6
-
-1. 保持系统更新
+保持系统更新
+------
 sudo dnf update
 sudo dnf upgrade
 
-2. DNF配置，提升速度：
+修改DNF配置，提升速度：
+------
 https://dnf.readthedocs.io/en/latest/...
 
-sudo nano /etc/dnf/dnf.conf
-添加以下内容:
+```
+sudo vi /etc/dnf/dnf.conf
+#添加以下内容:
 fastestmirror=True
 max_parallel_downloads=10
 defaultyes=True
 keepcache=True
+```
 
-3. 启用RPM Fusion
-https://rpmfusion.org/Configuration
+软件源配置
+------
+#### 添加[RPM Fusion](https://rpmfusion.org/Configuration)
+------
 
 ```
+#添加 free 和 nonfree 仓库
 sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
+# Install ApStream metadata
 sudo dnf groupupdate core
 ```
+#### 添加[FLATPACK](https://flatpak.org/setup/Fedora)软件包
 
+```
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
 
-4. FLATPACK软件包
-https://flatpak.org/setup/Fedora
+使用[清华源](https://mirrors.tuna.tsinghua.edu.cn/help/fedora/)替换官方软件源
+------
+Fedora 默认使用 Metalink 给出推荐的镜像列表，保证用户使用的镜像仓库足够新，并且能够尽快拿到安全更新，从而提供更好的安全性。所以通常情况下使用默认配置即可，无需更改配置文件。
 
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat...
+由于 Metalink 需要从国外的 Fedora 项目服务器上获取元信息，所以对于校园内网、无国外访问等特殊情况，metalink 并不适用，此时可以如下修改配置文件。
 
-5. 安装NVIDIA显卡驱动：
-https://rpmfusion.org/Howto/NVIDIA
+Fedora 的软件源配置文件可以有多个，其中： 系统默认的 fedora 仓库配置文件为 /etc/yum.repos.d/fedora.repo，系统默认的 updates 仓库配置文件为 /etc/yum.repos.d/fedora-updates.repo 。将上述两个文件先做个备份，根据 Fedora 系统版本分别替换为下面内容，之后通过 sudo dnf makecache 命令更新本地缓存，即可使用 TUNA 的软件源镜像。
 
-6. 桌面外观Gnome Tweak Tool：
+``fedora`` 仓库 (/etc/yum.repos.d/fedora.repo)
+```
+[fedora]
+name=Fedora $releasever - $basearch
+failovermethod=priority
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
+metadata_expire=28d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+```
+``updates`` 仓库 (/etc/yum.repos.d/fedora-updates.repo)
+```
+[updates]
+name=Fedora $releasever - $basearch - Updates
+failovermethod=priority
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
+enabled=1
+gpgcheck=1
+metadata_expire=6h
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+```
+
+``fedora-modular`` 仓库 (/etc/yum.repos.d/fedora-modular.repo)
+```
+[fedora-modular]
+name=Fedora Modular $releasever - $basearch
+failovermethod=priority
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Modular/$basearch/os/
+enabled=1
+metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+```
+
+``updates-modular`` 仓库 (/etc/yum.repos.d/fedora-updates-modular.repo)
+```
+[updates-modular]
+name=Fedora Modular $releasever - $basearch - Updates
+failovermethod=priority
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Modular/$basearch/
+enabled=1
+gpgcheck=1
+metadata_expire=6h
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+```
+
+***更新本地缓存***
+```
+sudo dnf makecache
+```
+
+安装[NVIDIA显卡驱动](https://rpmfusion.org/Howto/NVIDIA)
+------
+#### 1.查看显卡类型
+```
+/sbin/lspci | grep -e VGA
+```
+#### 2.安装显卡驱动
+```
+sudo dnf update -y # and reboot if you are not on the latest kernel
+sudo dnf install akmod-nvidia # rhel/centos users can use kmod-nvidia instead
+sudo dnf install xorg-x11-drv-nvidia-cuda #optional for cuda/nvdec/nvenc support
+```
+
+桌面外观Gnome Tweak Tool
+------
+一款对gnome界面調整的软件，可以修改主题、字体、gnome扩展、窗口、开机自启动等:
+------
+```
 sudo dnf install gnome-tweak-tool
+# 安装浏览器gnome扩展组件
+sudo dnf install chrome-gnome-shell
+# 安装菜单编辑器
+sudo dnf install menulibre
+```
+通过上面安装浏览器插件之后，我们可以访问[gnome扩展](https://extensions.gnome.org/)来安装所需要的插件。
 
-7. 安装GNOME extention:
-extensions.gnome.org
-dnf install chrome-gnome-shell gnome-extensions-app
+安装chrome
+------
+```
+# 启用chrome仓库
+sudo dnf config-manager --set-enabled google-chrome
 
-8. 安装Timeshift backup:
-sudo dnf install timeshift
+# 安装
+sudo dnf install google-chrome-stable
+```
+***注:启用chrome仓库后，也可以在Fedora系统里的Software商店里安装Chrome***
 
-9. vscode
+安装vscode
+------
 
 ```
 # We currently ship the stable 64-bit VS Code in a yum repository, the following script will install the key and repository:
@@ -74,82 +155,58 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 dnf check-update
 sudo dnf install code
 ```
-Visual Studio Code is officially distributed as a Snap package in the Snap Store:
 
-```
-sudo snap install --classic code # or code-insiders
-```
+***注意:用snap安装vscode， 在vscode里不能输入中文。***
 
-Once installed, the Snap daemon will take care of automatically updating VS Code in the background. You will get an in-product update notification whenever a new update is available.
 
-Installing snap on Fedora
-```
-sudo dnf install snapd
-sudo ln -s /var/lib/snapd/snap /snap
-```
-
-#输入法
+安装中文输入法
+------
 ```
 udo dnf install fcitx5 kcm-fcitx5 fcitx5-chinese-addons fcitx5-table-extra fcitx5-zhuyin fcitx5-configtool
 ```
 
-注意，严格安装上述package，之前想当然安装了fcitx5，安装的不全导致不支持。
-
-
+***注意，严格安装上述package，之前想当然安装了fcitx5，安装的不全导致不支持。***
 
 此时，在一个终端手动执行fcitx5
 
-$ fcitx5
-
-
+```
+fcitx5
+```
 
 在另一个终端，配置fcitx5
 
-$ fcitx5-config-qt
+```
+fcitx5-config-qt
+```
 
-选中中文输入法pinyin。
-
+选中中文输入法pinyin。如下图:
+![](/img/in-post/2023/fedora-config/select-input.png)
 
 
 在其它窗口，按Ctrl+space，就可以切换到中文输入法了。
 
 开机启动fcitx5
-1 设置默认输入法
+------
 
-$ sudo alternatives --config xinputrc
+#### 设置默认输入法
+```
+sudo alternatives --config xinputrc # choose fcitx5.
 
+cat << EOF > ~/.config/environment.d/00-fcitx5.conf
+INPUT_METHOD=fcitx5
+GTK_IM_MODULE=fcitx5
+QT_IM_MODULE=fcitx5
+XMODIFIERS=@im=fcitx5
+EOF
+```
 
-There are 2 programs which provide 'xinputrc'.
-
-  Selection    Command
------------------------------------------------
-*  1           /etc/X11/xinit/xinput.d/ibus.conf
- + 2           /etc/X11/xinit/xinput.d/fcitx5.conf
-
-Enter to keep the current selection[+], or type selection number: 2
-
-
-
-2 添加自动启动
+#### 添加自动启动
 
 ```
 ln -s /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart/
 ```
 
-
-
-3 设置环境变量
-
-不设置好像不影响，但是可能某些程序需要这些环境变量。
-
-
+#### 重新登陆
 ```
-$ cat << EOF > ~/.config/environment.d/00fcitx5.conf
-
-INPUT_METHOD=fcitx5
-GTK_IM_MODULE=fcitx5
-QT_IM_MODULE=fcitx5
-XMODIFIERS=@im=fcitx5
-
-EOF
+logout
 ```
