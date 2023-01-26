@@ -209,3 +209,43 @@ ln -s /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart/
 ```
 logout
 ```
+
+安装docker
+------
+
+#### 删除旧的版本
+```
+sudo dnf remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine
+```
+
+#### 设置docker仓库
+```
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager \
+    --add-repo \
+    https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+#### 安装Docker Engine
+```
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+#### 启动Docker.
+```
+sudo systemctl start docker
+```
+
+#### 测试Docker是否安装成功
+```
+sudo docker run hello-world
+```
