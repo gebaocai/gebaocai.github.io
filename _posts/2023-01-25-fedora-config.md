@@ -249,3 +249,16 @@ sudo systemctl start docker
 ```
 sudo docker run hello-world
 ```
+
+#### 安装Docker Compose
+Linux 上我们可以从 Github 上下载它的二进制包来使用，最新发行的版本地址：https://github.com/docker/compose/releases。
+运行以下命令以下载 Docker Compose 的当前稳定版本：
+```
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+***要安装其他版本的 Compose，请替换 v2.15.1。***
+
+#### 卸载Docker Compose
+```
+sudo rm /usr/local/bin/docker-compose
+```
