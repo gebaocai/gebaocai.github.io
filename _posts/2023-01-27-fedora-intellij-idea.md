@@ -27,8 +27,8 @@ sudo tar -xzf ideaIU-*.tar.gz -C /opt
 在`/opt`解压的目录里运行`idea.sh`启动IntelliJ IDEA
 
 #### 创建桌面图标(下面任选一个)
-* On the Welcome screen, click Configure | Create Desktop Entry
-* From the main menu, click Tools | Create Desktop Entry
+* On the Welcome screen, click Configure
+* From the main menu, click Tools
 
 安装ide-eval-resetter
 ------
