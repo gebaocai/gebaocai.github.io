@@ -24,8 +24,10 @@ sudo snap install adguard-home
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
 ```
+
 配置AdGuardHome
 ------
+
 #### 在`设置-DNS设置`里， 
 * 上游 DNS 服务器修改为
 ```https://dns.alidns.com/dns-query
