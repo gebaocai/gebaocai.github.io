@@ -30,7 +30,8 @@ sudo systemctl disable systemd-resolved
 
 #### 在`设置-DNS设置`里， 
 * 上游 DNS 服务器修改为
-```https://dns.alidns.com/dns-query
+```
+https://dns.alidns.com/dns-query
 https://doh.pub/dns-query
 ```
 * Bootstrap DNS 服务器修改为
