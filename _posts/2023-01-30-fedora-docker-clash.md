@@ -27,6 +27,7 @@ docker network create -d macvlan \
 ```
 用Docker-compose部署容器
 ------
+
 `vim docker-compose.yml` 输入以下内容
 ```
 version: '3.3'
@@ -49,7 +50,7 @@ networks:
     external: true
 ```
 
-可以看到volumes挂载了2个目录：
+#### 挂载volumes的2个目录
 * ./conf/clash
 
     这里是clash的配置文件， 我们可以直接把[`clash_for_windows`](https://gebaocai.github.io/2023/01/26/fedora-clash-for-windows/)的配置文件拿过来用, 路径在`~/.config/clash/profiles/`
@@ -105,7 +106,7 @@ networks:
     pnpm install
     pnpm build
     ```
-启动docker clash
+#### 启动docker clash
 ```
 docker-compose up clash
 ```
