@@ -120,5 +120,50 @@ docker-compose up clash
 
 这样连接到路由器的设备都可以通过Clash上网了。
 
+常见问题
+------
+一般在macvlan模式下同网段的其他机器可以和容器互通，但宿主不能和容器互通，这是在macvlan模式设计的时候为了安全而禁止了宿主机和容器直接通信。
+如果想要实现互通，有个曲线救国的方法，就是macvlan与macvlan之间可以互通，只需要在宿主机再创建一个macvlan网络，然后修改路由，让数据经过这个macvlan达到互通的目的。
+#### 增加rc.local配置文件
+`vim /etc/rc.d/rc.local`
+```
+#!/bin/bash
+ip link add macvlan2 link enp4s0 type macvlan mode bridge
+ip addr add 192.168.0.55 dev macvlan2
+ip link set macvlan2 up
 
+ip route add 192.168.0.54 dev macvlan2
+```
+#### 在rc-local.service中添加Install字段
+`vim /lib/systemd/system/rc-local.service`
+```
+[Unit]
+Description=/etc/rc.d/rc.local Compatibility
+Documentation=man:systemd-rc-local-generator(8)
+ConditionFileIsExecutable=/etc/rc.d/rc.local
+After=network.target
 
+[Service]
+Type=forking
+ExecStart=/etc/rc.d/rc.local start
+TimeoutSec=0
+RemainAfterExit=yes
+GuessMainPID=no
+
+[Install]
+WantedBy=multi-user.target
+```
+#### 授权文件并启动设置开机自启
+```
+chmod +x /etc/rc.d/rc.local
+systemctl enable rc-local.service
+systemctl start rc-local.service
+systemctl status rc-local.service
+```
+#### 测试
+```
+(base) [gebaocai@fedora-ge ~]$ ping 192.168.0.54
+PING 192.168.0.54 (192.168.0.54) 56(84) bytes of data.
+64 bytes from 192.168.0.54: icmp_seq=1 ttl=64 time=0.290 ms
+64 bytes from 192.168.0.54: icmp_seq=2 ttl=64 time=0.110 ms
+```
