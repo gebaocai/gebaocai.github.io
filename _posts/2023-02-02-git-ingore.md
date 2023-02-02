@@ -1,13 +1,13 @@
 ---
 layout: post
-title: Git忽略已经提交过一次文件Git忽略文件
+title: Git忽略已经提交过的文件
 author: "gebaocai"
 header-style: text
 lang: zh
 tags: [Git]
 ---
 
-Git忽略已经提交过一次文件Git忽略文件
+Git忽略文件分为几种情况：
 
 从未提交过的文件
 ------
