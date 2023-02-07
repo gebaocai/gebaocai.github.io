@@ -41,6 +41,7 @@ dockerd代理
 在执行docker pull时，是由守护进程dockerd来执行。 因此，代理需要配在dockerd的环境中。 而这个环境，则是受systemd所管控，因此实际是systemd的配置。
 
 `sudo mkdir -p /etc/systemd/system/docker.service.d`
+
 `sudo touch /etc/systemd/system/docker.service.d/proxy.conf`
 
 在这个proxy.conf文件（可以是任意*.conf的形式）中，添加以下内容：
