@@ -92,3 +92,15 @@ docker build . \
     --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com" \
     -t your/image:tag
 ```
+
+#### docker push image
+```
+#build image
+docker build -t <hub-user>/<repo-name>[:<tag>]
+#re-tagging image
+docker tag <existing-image> <hub-user>/<repo-name>[:<tag>]
+#commit changes
+docker commit <existing-container> <hub-user>/<repo-name>[:<tag>]
+#push image
+docker push <hub-user>/<repo-name>:<tag>
+```
