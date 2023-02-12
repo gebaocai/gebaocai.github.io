@@ -1,64 +1,130 @@
 ---
 layout: post
-title: docker-compose安装jenkins
+title: Jenkins Build Java App With Maven
 author: "gebaocai"
 header-style: text
 lang: zh
 tags: [Jenkins, Docker]
 ---
 
-> 我使用的是Docker-in-Docker pipeline模式，也就是agent为docker。如果不是这种就看[官方](https://www.jenkins.io/zh/doc/)就行了.
+最近想用Jenkins把项目自动部署到服务器上面， 构建项目时会用到`maven`和`node`， 这几天用docker as agent的模式搭建了一下，下面是脚本:
 
-创建jenkins工作目录
-mkdir -p data/jenkins
+`vim Jenkinsfile`
+```
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.8.7-eclipse-temurin-11'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Deliver') { 
+            steps {
+                sh './jenkins/scripts/deliver.sh' 
+            }
+        }
+    }
+}
+```
 
-编写docker-compose.yaml文件
+启动Jenkins
 ------
 
+#### 创建jenkins工作目录
+`mkdir -p data/jenkins/data`
+
+`mkdir -p data/jenkins/docker-certs`
+
+#### 编写docker-compose.yaml文件
 ```
-version: '3.3'
-services:
-  jenkins:
-    image: 'jenkins/jenkins:lts'
-    container_name: jenkins
+jenkins-docker:
+    container_name: jenkins-docker
+    image: docker:dind
     restart: always
-    networks:
-      macvlan-net:
-        ipv4_address: 192.168.0.50
+    privileged: true
+    networks: 
+      jenkins:
+        aliases: 
+          - docker
+    ports:
+      - 3000:3000
+      - 5000:5000
+      - 2376:2376
     environment:
+      DOCKER_TLS_CERTDIR: /certs 
       HTTP_PROXY: 'http://192.168.0.54:7890'
       HTTPS_PROXY: 'http://192.168.0.54:7890'
-      NO_PROXY: 'localhost, *.test.lan'
+      NO_PROXY: 'docker, localhost, *.test.lan'
     volumes:
-      - ./data/jenkins:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - $HOME:/home
+      - ./data/jenkins/docker-certs:/certs/client
+      - ./data/jenkins/data:/var/jenkins_home
+    command: --storage-driver=overlay2
+  jenkins-blueocean:
+    container_name: jenkins-blueocean
+    image: gebaocai/myjenkins-blueocean:2.375.3-1
+    restart: always
+    networks: 
+      - jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    environment:
+      DOCKER_HOST: 'tcp://docker:2376'
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
+      JAVA_OPTS: '-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true'
+      HTTP_PROXY: 'http://192.168.0.54:7890'
+      HTTPS_PROXY: 'http://192.168.0.54:7890'
+      NO_PROXY: 'docker, localhost, *.test.lan'
+    volumes:
+      - ./data/jenkins/docker-certs:/certs/client
+      - ./data/jenkins/data:/var/jenkins_home
+      - $HOME/.m2:/root/.m2
+networks:
+  jenkins:
+    external: true      
 ```
 
-`networks`和`environment`如果没需求可以不设置， 分别配置的是静态ip和代理。
+`environment`中的`HTTP_PROXY`、`HTTPS_PROXY`、`NO_PROXY`如果没需求可以不设置
 
-启动jenkis
-------
-`docker-compose up -d jenkins`
+####启动jenkis命令
 
-查看密码并登陆
-------
-`docker logs -f jenkins`
+`docker-compose up -d jenkins-docker`
+
+`docker-compose up -d jenkins-blueocean`
+
+####查看密码并登陆
+
+`docker logs -f jenkins-blueocean`
 
 启动之后，会默认生成一个密码, 用做登录用.
 ![](/img/in-post/2023/docker-in-docker-jenkins/setup-jenkins-02-copying-initial-admin-password.png)
 
-登录地址为：`http://192.168.0.50:8080`
-> 我是在docker-compose配置的静态ip, 默认因该为`http://127.0.0.1:8080`
+登录地址为：`http://127.0.0.1:8080`
 
-***做到这里，Docker运行JenKins就完成了***
-
-docker not found!!!
-* Enter the jenkins container as root user:
-`docker exec -it -u0 <container id> bash`
-* Install docker
-`curl https://get.docker.com > dockerinstall && chmod 777 dockerinstall && ./dockerinstall`
-* And then exit the Jenkins container and change docker.sock privilege to read and write for all users with:
-`sudo chmod 666 /var/run/docker.sock`
-
-Jenkins error buildind : docker: /lib/x86_64-linux-gnu/libc.so.6: version `glibc_2.34' not found (required by docker)
+配置Jenkins
+----
+* 登录之后，安装建议安装的插件
+* 创建`pipeline`任务
+![](/img/in-post/2023/docker-in-docker-jenkins/create-pipeline-job.png)
+* 配置仓位地址及Jenkinsfile
+![](/img/in-post/2023/docker-in-docker-jenkins/config-pipeline-job.png)
