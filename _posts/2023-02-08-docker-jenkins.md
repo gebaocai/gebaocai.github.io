@@ -105,6 +105,28 @@ networks:
 ```
 
 `environment`中的`HTTP_PROXY`、`HTTPS_PROXY`、`NO_PROXY`如果没需求可以不设置
+`gebaocai/myjenkins-blueocean:2.375.3-1`是通过下面脚本build出来的。
+
+镜像脚本：
+* Create Dockerfile with the following content
+```
+  FROM jenkins/jenkins:2.375.3
+  USER root
+  RUN apt-get update && apt-get install -y lsb-release
+  RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+    https://download.docker.com/linux/debian/gpg
+  RUN echo "deb [arch=$(dpkg --print-architecture) \
+    signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+    https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+  RUN apt-get update && apt-get install -y docker-ce-cli
+  USER jenkins
+  RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+```
+* Build a new docker image from this Dockerfile
+```
+docker build -t gebaocai/myjenkins-blueocean:2.375.3-1 .
+```
 
 ####启动jenkis命令
 
