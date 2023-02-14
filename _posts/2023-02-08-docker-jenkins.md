@@ -14,32 +14,24 @@ tags: [Jenkins, Docker]
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.7-eclipse-temurin-11'
-            args '-v /root/.m2:/root/.m2'
+            image 'gebaocai/maven-uid1000:3.8.7'
+            args '--name maven -v /var/jenkins_home:/var/jenkins_home -e MAVEN_CONFIG=/var/jenkins_home/.m2'
         }
-    }
-    options {
-        skipStagesAfterUnstable()
     }
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests -Duser.home=/var/jenkins_home clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn /var/jenkins_home test'
             }
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
                 }
-            }
-        }
-        stage('Deliver') { 
-            steps {
-                sh './jenkins/scripts/deliver.sh' 
             }
         }
     }
@@ -98,7 +90,6 @@ jenkins-docker:
     volumes:
       - ./data/jenkins/docker-certs:/certs/client
       - ./data/jenkins/data:/var/jenkins_home
-      - $HOME/.m2:/root/.m2
 networks:
   jenkins:
     external: true      
