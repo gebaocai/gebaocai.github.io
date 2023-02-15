@@ -61,6 +61,18 @@ http://192.168.0.99:5678/dav  1.3T  763G  509G  61% /mnt/xiaoya
 umount /mnt/xiaoya
 ```
 
+注：出现umount target is busy
+可以通过lsof查找占用进程
+
+```
+sudo lsof /mnt/xiaoya
+COMMAND      PID     USER   FD   TYPE DEVICE SIZE/OFF           NODE NAME
+updatedb  512750     root    6r   DIR  0,330      792              1 /mnt/xiaoya
+updatedb  512750     root    7r   DIR  0,330        0 94620245402672 /mnt/xiaoya/整理中/xxT影视资源/美剧/B（33部）/b 布里奇顿/布里奇顿S01
+
+sudo kill 512750
+```
+
 开机自动挂载小雅
 ------
 
