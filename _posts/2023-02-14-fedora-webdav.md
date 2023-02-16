@@ -28,15 +28,16 @@ webdav 账号密码
 重启就会自动更新数据库及搜索索引文件
 docker restart xiaoya
 ```
-
-安装davfs2
+~~davfs2~~
 ------
+
+#### 安装davfs2
+
 ```
 sudo dnf install davfs2
 ```
 
-挂载小雅
-------
+#### 挂载小雅
 
 * 创建挂在目录
 ```
@@ -73,8 +74,8 @@ updatedb  512750     root    7r   DIR  0,330        0 94620245402672 /mnt/xiaoya
 sudo kill 512750
 ```
 
-开机自动挂载小雅
-------
+#### 开机自动挂载小雅
+
 
 * 修改/etc/fstab
 在/etc/fstab添加以下记录
@@ -94,4 +95,102 @@ http://192.168.0.99:5678/dav	guest	guest_Api789
 设置开机启动
 ```
 mount /mnt/xiaoya
+```
+rclone
+------
+
+#### 安装 
+```
+sudo dnf install rclone
+```
+
+#### 配置rclone
+要配置 WebDAV 远程，您需要有一个 URL，以及一个用户名和密码。如果您知道您正在连接的是哪种系统，那么 rclone 可以启用额外的功能。 
+
+这是一个如何制作一个名为 remote 的遥控器的示例。第一次运行：
+```
+rclone config
+```
+
+这将引导您完成交互式设置过程：
+
+```
+No remotes found, make a new one?
+n) New remote
+s) Set configuration password
+q) Quit config
+n/s/q> n
+name> remote
+Type of storage to configure.
+Choose a number from below, or type in your own value
+[snip]
+XX / WebDAV
+   \ "webdav"
+[snip]
+Storage> webdav
+URL of http host to connect to
+Choose a number from below, or type in your own value
+ 1 / Connect to example.com
+   \ "https://example.com"
+url> http://192.168.0.99:5678/dav
+Name of the WebDAV site/service/software you are using
+Choose a number from below, or type in your own value
+...
+44 / Union merges the contents of several upstream fs
+   \ (union)
+45 / Uptobox
+   \ (uptobox)
+46 / WebDAV
+   \ (webdav)
+...
+vendor> 46
+User name
+user> guest
+Password.
+y) Yes type in my own password
+g) Generate random password
+n) No leave this optional password blank
+y/g/n> y
+Enter the password:
+password:
+Confirm the password:
+password:
+Bearer token instead of user/pass (e.g. a Macaroon)
+bearer_token>
+Remote config
+--------------------
+[remote]
+name = xiaoya
+type = webdav
+url = http://192.168.0.99:5678/dav
+....
+--------------------
+y) Yes this is OK
+e) Edit this remote
+d) Delete this remote
+y/e/d> y
+```
+
+配置完成后，您就可以像这样使用 rclone， 在 WebDAV 的顶层列出目录
+```
+rclone lsd remote:
+```
+列出 WebDAV 中的所有文件
+```
+rclone ls remote:
+```
+
+将本地目录复制到名为 backup 的 WebDAV 目录
+```
+rclone copy /home/source remote:backup
+```
+
+#### 挂载小雅
+```
+rclone mount Alist: /home/gebaocai/xiaoya --use-mmap --umask 000 --allow-other --allow-non-empty --dir-cache-time 24h --cache-dir=/home/gebaocai/cache --vfs-cache-mode full --buffer-size 512M --vfs-read-chunk-size 16M --vfs-read-chunk-size-limit 64M --vfs-cache-max-size 10G --daemon
+```
+
+#### 卸载
+```
+umount /home/gebaocai/xiaoya
 ```
