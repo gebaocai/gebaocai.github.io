@@ -15,23 +15,13 @@ pipeline {
     agent {
         docker {
             image 'gebaocai/maven-uid1000:3.8.7'
-            args '--name maven -v /var/jenkins_home:/var/jenkins_home -e MAVEN_CONFIG=/var/jenkins_home/.m2'
+            args '--name maven -v /home/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/jenkins_home/.m2'
         }
     }
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests -Duser.home=/var/jenkins_home clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn /var/jenkins_home test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
+                sh 'mvn -Duser.home=/var/maven -B -DskipTests clean package'
             }
         }
     }
@@ -69,6 +59,7 @@ jenkins-docker:
     volumes:
       - ./data/jenkins/docker-certs:/certs/client
       - ./data/jenkins/data:/var/jenkins_home
+      - /home/gebaocai/.m2:/home/.m2
     command: --storage-driver=overlay2
   jenkins-blueocean:
     container_name: jenkins-blueocean
@@ -90,6 +81,7 @@ jenkins-docker:
     volumes:
       - ./data/jenkins/docker-certs:/certs/client
       - ./data/jenkins/data:/var/jenkins_home
+      - /home/gebaocai/.m2:/home/.m2
 networks:
   jenkins:
     external: true      
