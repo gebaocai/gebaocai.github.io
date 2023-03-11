@@ -13,11 +13,11 @@ tags: [Fedora, IntelliJ IDEA]
 sudo dnf install java-1.8.0-openjdk.x86_64
 ```
 
-安装IntelliJ IDEA 2021.2
+安装IntelliJ IDEA 2021.1
 ------
 
-#### 下载IntelliJ IDEA 2021.2.4 
-`https://download.jetbrains.com/idea/ideaIU-2021.2.4.tar.gz` 
+#### 下载IntelliJ IDEA 2021.1.3 
+`https://download.jetbrains.com/idea/ideaIU-2021.1.3.tar.gz` 
 
 #### 解压到要安装的目录
 ```
