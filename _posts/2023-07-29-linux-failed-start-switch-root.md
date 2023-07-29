@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Failed to switch root: Specified switch root path '/sysroot' does not seem to be an 0S tree, os-release file is missing 
+title: Failed to switch root Specified switch root path '/sysroot' does not seem to be an 0S tree, os-release file is missing 
 author: "gebaocai"
 header-style: text
 lang: zh
@@ -40,6 +40,4 @@ cp /usr/lib/os-release /sysroot/etc/
 cd /
 exit
 ```
-
-经测试， 通过以上方法能成功进入系统。
 
