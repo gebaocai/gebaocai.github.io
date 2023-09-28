@@ -9,7 +9,7 @@ tags: [安卓, 古古识字]
 
 古古识字解锁界面
 ------
-![](/img/in-post/2023/android-root-certificate/gugushizi.PNG)
+![gugushizi](/img/in-post/2023/android-root-certificate/gugushizi.PNG)
 
 ### 实现思路
 
@@ -43,7 +43,7 @@ openssl x509 -inform DER -subject_hash_old -in FiddlerRoot.cer
 openssl x509 -inform DER -subject_hash_old -in 证书.pem
 ```
 #### 计算结果
-![](/img/in-post/2023/android-root-certificate/hash.PNG)
+![hash](/img/in-post/2023/android-root-certificate/hash.PNG)
 
 #### 生成系统系统预设格式证书文件
 ```
@@ -56,7 +56,7 @@ openssl x509 -inform PEM -text -in xxx.pem > 269953fb.0
 **注意： 证书格式为{hash}.0**
 
 #### 最后编辑一下输出的文件，把 -----BEGIN CERTIFICATE----- 到最后的这部分移动到开头。结果如下
-![](/img/in-post/2023/android-root-certificate/certificate.PNG)
+![certificate](/img/in-post/2023/android-root-certificate/certificate.PNG)
 
 #### 上传证书到Android手机
 
