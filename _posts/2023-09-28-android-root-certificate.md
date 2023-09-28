@@ -71,7 +71,7 @@ chmod 644 /system/etc/security/cacerts/269953fb.0
 
 到此然后重启手机。就可以正常抓https数据包了
 
-吐槽一下:
+吐槽一下华为
 ------
 手里有好几部华为手机， 解锁Bootloader都不太友好， 无非两种方法：
 1. 拆机解锁（PotatoNV）(免费)
