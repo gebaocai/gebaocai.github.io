@@ -13,8 +13,7 @@ tags: [安卓, 古古识字]
 
 ### 实现思路
 
-####
-Fiddler模拟登录返回接口
+#### Fiddler模拟登录返回接口
 返回格式：
 ```
 POST https://www.gugushizi.com/api/sendaction
