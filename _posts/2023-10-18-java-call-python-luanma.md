@@ -108,4 +108,10 @@ arg = new String(arg.getBytes(encoing), "utf-8");
 ```
 
 这样程序就可以通过编码自动适配
+在cmd执行
+```
+java JavaCallPython2.java
+输出:
+python python_code.py 我是中文
+```
 
