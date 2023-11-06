@@ -14,7 +14,7 @@ tags: [Autoxjs]
 环境配置
 ------
 
-#### 电脑端:
+### 电脑端:
 1. 在电脑端是基于 vscode 开发的。
 2. 在 vscode 中安装扩展 ***Auto.js-Autox.js-VSCodeExt***
 
