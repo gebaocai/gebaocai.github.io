@@ -10,7 +10,7 @@ tags: [scrcpy]
 介绍
 ------
 在现代生活中，智能手机和电脑已经成为我们日常生活中不可或缺的工具。有时，我们需要将手机屏幕投射到电脑上，例如在进行演示、玩游戏或查看手机内容时。scrcpy是一款开源工具，可以帮助我们轻松地实现这一目标。本文将介绍如何使用scrcpy将手机无线投屏到电脑。
-![](/img/in-post/2024/scrapy-screen-copy/scrcpy.png)
+![](/img/in-post/2024/scrcpy-screen-copy/scrcpy.png)
 
 准备工作
 ------
@@ -44,6 +44,11 @@ scrcpy --video-source=camera --camera-size=1920x1080 --camera-facing=front --v4l
 * Control the device without mirroring by simulating a physical keyboard and mouse (USB debugging not required):
 ```
 scrcpy --otg
+```
+
+* 常用命令
+```
+scrcpy --no-audio --disable-screensaver --turn-screen-off
 ```
 
 结论
