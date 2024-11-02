@@ -29,7 +29,7 @@ tags: [hyper-v]
 
 Linux系统稍微麻烦一点儿, 
 
-1. 首先输入lsblk查看当前逻辑卷和磁盘空间
+### 首先输入lsblk查看当前逻辑卷和磁盘空间
 ```
 lsblk
 NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -41,12 +41,12 @@ sda               8:0    0   50G  0 disk
 sr0              11:0    1 1024M  0 rom
 ```
 
-2. 通过发现虚拟机已经识别到扩展后的硬盘了， 现在需要调整分区并释放空间给sda2。执行命令
+### 通过发现虚拟机已经识别到扩展后的硬盘了， 现在需要调整分区并释放空间给sda2。执行命令
 ```
 parted /dev/sda resizepart 2 100%
 ```
 使用 parted 重新调整分区大小, 这里 2 是 /dev/sda2 的分区编号，100% 表示扩展到整个磁盘的可用空间。
-3. 检查调整后的分区
+### 检查调整后的分区
 
 ```
 parted /dev/sda print
@@ -62,18 +62,18 @@ Number  Start   End     Size    Type     File system  Flags
 
 发现分区已经调整
 
-4. 运行 pvresize
+### 运行 pvresize
 调整完分区后，执行以下命令来扩展物理卷：
 ```
 pvresize /dev/sda2
 ```
 
-5. 扩展逻辑卷
+### 扩展逻辑卷
 ```
 lvextend -l +100%FREE /dev/mapper/cl_192-root
 ```
 逻辑卷信息可以通过fdisk -l查看
-6. 调整文件系统大小
+### 调整文件系统大小
 你需要调整文件系统大小以匹配新的逻辑卷大小。根据你的文件系统类型，使用以下命令
 
 * xfs(hyper-v模式下)
@@ -87,7 +87,7 @@ xfs_growfs /dev/mapper/cl_192-root
 resize2fs /dev/mapper/cl_192-root
 ```
 
-7. 检查是否扩容成功
+### 检查是否扩容成功
 ```
 df -h
 Filesystem               Size  Used Avail Use% Mounted on
