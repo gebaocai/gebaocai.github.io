@@ -47,6 +47,7 @@ parted /dev/sda resizepart 2 100%
 ```
 使用 parted 重新调整分区大小, 这里 2 是 /dev/sda2 的分区编号，100% 表示扩展到整个磁盘的可用空间。
 3. 检查调整后的分区
+
 ```
 parted /dev/sda print
 Model: Msft Virtual Disk (scsi)
@@ -54,12 +55,11 @@ Disk /dev/sda: 53.7GB
 Sector size (logical/physical): 512B/4096B
 Partition Table: msdos
 Disk Flags: 
-
 Number  Start   End     Size    Type     File system  Flags
  1      1049kB  1075MB  1074MB  primary  xfs          boot
  2      1075MB  53.7GB  52.6GB  primary               lvm
-
 ```
+
 发现分区已经调整
 
 4. 运行 pvresize
